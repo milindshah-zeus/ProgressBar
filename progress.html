@@ -1,0 +1,123 @@
+<html>
+
+<head>
+    <style>
+        .display-flex {
+            display: flex;
+        }
+
+        #progress-bar {
+            width: 60vw;
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            height: 20px;
+        }
+
+        #progress-bar-fill {
+            width: 0%;
+            background-color: blue;
+            height: 100%;
+            border-radius: inherit;
+        }
+
+        #progress-label{
+            margin-left:10px;
+        }
+
+        .progress-buttons {
+            background: none;
+            font-size: 1.2rem;
+            border: solid 1px grey;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        #pause-progress-button,
+        #reset-progress-button,
+        #resume-progress-button {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Progress Bar (0-100)</h1>
+    <!-- <progress id="progress-bar" value="0" max="100"></progress> -->
+
+    <div class="display-flex">
+        <div id="progress-bar">
+            <div id="progress-bar-fill">
+            </div>
+        </div>
+        <label id="progress-label">0 %</label>
+    </div>
+    <br><br>
+    <label>Enter the progress time required in seconds
+        <br><input type="number" id="progress-time"></input>
+    </label>
+    <br>
+    <button id="start-progress-button" class="progress-buttons" onClick="startProgress()"> Start Progress Bar </button>
+    <button id="pause-progress-button" class="progress-buttons" onClick="pauseProgress()"> Pause Progress Bar </button>
+    <button id="resume-progress-button" class="progress-buttons" onClick="startProgress()"> Resume Progress Bar
+    </button>
+    <button id="reset-progress-button" class="progress-buttons" onClick="resetProgress()"> Reset Progress Bar </button>
+
+
+    <script>
+
+        var progress = 0;
+        const progressBar = document.getElementById('progress-bar-fill');
+        progressBar.style.width = '0%';
+        var progress = parseInt(progressBar.style.width);
+       
+        const progressLabel = document.getElementById('progress-label');
+        const startButton = document.getElementById('start-progress-button');
+        const pauseButton = document.getElementById('pause-progress-button');
+        const resumeButton = document.getElementById('resume-progress-button');
+        const resetButton = document.getElementById('reset-progress-button');
+
+        function startProgress() {
+            if (progress != 100) {
+                 //time *1000 (second to ms) / 100 (for each percentage) = *10
+                var time = document.getElementById('progress-time').value * 10;
+                progressBarInterval = setInterval(function () {
+                    progress += 1;
+                    progressBar.style.width = progress + '%';
+                    progressLabel.innerHTML = progress + ' %';
+                    if (progress == 100) {
+                        clearInterval(progressBarInterval);
+                        startButton.style.display = 'none';
+                        pauseButton.style.display = 'none';
+                        resumeButton.style.display = 'none';
+                    }
+                }, time);
+                startButton.style.display = 'none';
+                pauseButton.style.display = 'block';
+                resumeButton.style.display = 'none';
+                resetButton.style.display = 'block';
+            }
+        }
+
+        function pauseProgress() {
+            clearInterval(progressBarInterval);
+            resumeButton.style.display = 'block';
+            pauseButton.style.display = 'none';
+        }
+
+        function resetProgress() {
+            clearInterval(progressBarInterval);
+            progress = 0;
+            progressBar.style.width = progress + '%';
+            progressLabel.innerHTML = progress + ' %';
+            startButton.style.display = 'block';
+            pauseButton.style.display = 'none';
+            resumeButton.style.display = 'none';
+            resetButton.style.display = 'none';
+        }
+    </script>
+
+</body>
+
+</html>
